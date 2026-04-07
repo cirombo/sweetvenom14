@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>not found</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            animation: darkblood 60s forwards;
+        }
+
+        @keyframes darkblood {
+            0%   { background-color: #000000; }
+            100% { background-color: #8b0000; }
+        }
+
+        img {
+            width: 60%;
+            max-width: 300px;
+            opacity: 0;
+            animation: appear 60s forwards;
+        }
+
+        @keyframes appear {
+            0%   { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+    <script>
+        setTimeout(() => location.href = "index.html", 10000);
+    </script>
+</head>
+<body>
+    <img src="images/god.png" alt="">
+</body>
+</html>
