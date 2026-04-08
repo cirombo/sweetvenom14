@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>malevolentlover67 — sweetpoison14</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #c8f5a0;
+            font-family: Arial, sans-serif;
+        }
+
+        .topbar {
+            background-color: #8db87a;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #6a9e58;
+        }
+
+        .topbar a img {
+            height: 55px;
+            width: auto;
+        }
+
+        .topbar input {
+            padding: 10px 14px;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            border: 2px solid #6a9e58;
+            background-color: #eef2e6;
+            border-radius: 4px;
+            width: 45%;
+        }
+
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            gap: 16px;
+        }
+
+        .profile-container img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #6a9e58;
+        }
+
+        .profile-container h2 {
+            font-size: 1.1rem;
+            color: #2a4a1a;
+            letter-spacing: 1px;
+        }
+
+        .lock-box {
+            background-color: rgba(0,0,0,0.1);
+            border-radius: 6px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .lock-box span {
+            font-size: 0.8rem;
+            color: #2a4a1a;
+            letter-spacing: 1px;
+        }
+
+        .lock-box input {
+            padding: 10px 14px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            border: 2px solid #6a9e58;
+            background-color: #eef2e6;
+            border-radius: 4px;
+            width: 100%;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .lock-box button {
+            padding: 8px 24px;
+            background-color: #6a9e58;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .lock-box button:hover {
+            background-color: #4a7e38;
+        }
+
+        #error-msg {
+            font-size: 0.85rem;
+            color: red;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        #error-msg.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <a href="index.html"><img src="images/logo.png" alt="logo"></a>
+        <input type="text" placeholder="search...">
+    </div>
+
+    <div class="profile-container">
+        <img src="images/profile2.png" alt="malevolentlover67">
+        <h2>malevolentlover67</h2>
+
+        <div class="lock-box">
+            <span>🔒 this profile is private</span>
+            <input type="password" id="pw-input" placeholder="enter password">
+            <button onclick="checkPassword()">enter</button>
+            <div id="error-msg">wrong password</div>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('pw-input');
+
+        input.addEventListener('keydown', e => {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        function checkPassword() {
+            if (input.value === 'iamtheonlygod') {
+                location.href = 'malevolentlover.html';
+            } else {
+                const err = document.getElementById('error-msg');
+                err.classList.add('visible');
+                setTimeout(() => err.classList.remove('visible'), 2000);
+                input.value = '';
+            }
+        }
+    </script>
+
+</body>
+</html>
