@@ -4,12 +4,7 @@
     <title>404</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background-color: #000000;
             display: flex;
@@ -18,30 +13,21 @@
             height: 100vh;
             animation: darkblood 60s forwards;
         }
-
-        @keyframes darkblood {
-            0%   { background-color: #000000; }
-            100% { background-color: #8b0000; }
-        }
-
+        @keyframes darkblood { 0% { background-color: #000000; } 100% { background-color: #8b0000; } }
         img {
             width: 60%;
             max-width: 300px;
             opacity: 0;
             animation: appear 60s forwards;
         }
-
-        @keyframes appear {
-            0%   { opacity: 0; }
-            100% { opacity: 1; }
-        }
+        @keyframes appear { 0% { opacity: 0; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
     <img src="images/god.png" alt="">
-    <audio id="bg-audio" src="sounds/watson_intro.mp3" loop autoplay></audio>
+    <audio id="audio" src="sound/watson_intro.mp3" loop autoplay></audio>
     <script>
-        const audio = document.getElementById('bg-audio');
+        const audio = document.getElementById('audio');
         audio.volume = 0.4;
         audio.play();
         const duration = 9500;
