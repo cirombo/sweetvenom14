@@ -36,11 +36,24 @@
             100% { opacity: 1; }
         }
     </style>
-    <script>
-        setTimeout(() => location.href = "index.html", 10000);
-    </script>
 </head>
 <body>
     <img src="images/god.png" alt="">
+    <audio id="bg-audio" src="sounds/watson_intro.mp3" loop autoplay></audio>
+    <script>
+        const audio = document.getElementById('bg-audio');
+        audio.volume = 0.4;
+        audio.play();
+        const duration = 9500;
+        const start = Date.now();
+        function fade() {
+            const elapsed = Date.now() - start;
+            const progress = Math.min(elapsed / duration, 1);
+            audio.volume = 0.4 + 0.6 * progress;
+            if(progress < 1) requestAnimationFrame(fade);
+        }
+        fade();
+        setTimeout(() => location.href = "index.html", 10000);
+    </script>
 </body>
 </html>
