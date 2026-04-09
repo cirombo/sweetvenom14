@@ -195,188 +195,138 @@
         <div id="password">awesompassworxd</div>
     </div>
 
-<script>
-const canvas = document.getElementById('matrix');
-const ctx = canvas.getContext('2d');
+    <script>
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
 
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
 
-const chars = '01アイウエオ死null>_#@%&';
-const fontSize = 13;
-let drops = [];
+        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノ死null>_#@%&';
+        const fontSize = 13;
+        let drops = [];
 
-function initDrops() {
-    drops = Array(Math.floor(canvas.width / fontSize)).fill(1);
-}
-initDrops();
+        function initDrops() {
+            drops = Array(Math.floor(canvas.width / fontSize)).fill(1);
+        }
+        initDrops();
 
-function drawMatrix() {
-    ctx.fillStyle = 'rgba(0,0,0,0.06)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0,0,0,0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillStyle = Math.random() > 0.95 ? '#ffffff' : '#00ff00';
+                ctx.globalAlpha = Math.random() * 0.5 + 0.3;
+                ctx.font = fontSize + 'px monospace';
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+            ctx.globalAlpha = 1;
+        }
 
-    for (let i = 0; i < drops.length; i++) {
-        const text = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillStyle = Math.random() > 0.96 ? '#fff' : '#00ff00';
-        ctx.globalAlpha = Math.random() * 0.5 + 0.3;
-        ctx.font = fontSize + 'px monospace';
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        const ROWS = 4, COLS = 5;
+        const TOTAL_NODES = ROWS * COLS;
+        const NODE_LIFETIME = 2000;
+        const GAME_DURATION = 30000;
+        const SPAWN_INTERVAL = 1200;
 
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
-    }
-    ctx.globalAlpha = 1;
-}
+        let score = 0;
+        let gameActive = false;
+        let matrixInterval, spawnInterval, gameTimer, progressInterval;
+        let activeNodes = new Map();
+        let gameStart;
 
-const ROWS = 4, COLS = 5;
-const TOTAL_NODES = ROWS * COLS;
+        const grid = document.getElementById('grid');
+        const scoreEl = document.getElementById('score');
+        const progressBar = document.getElementById('progress-bar');
+        const nodes = [];
 
-let NODE_LIFETIME = 2200;
-let spawnRate = 1400;
-const GAME_DURATION = 60000;
+        for (let i = 0; i < TOTAL_NODES; i++) {
+            const node = document.createElement('div');
+            node.className = 'node';
+            node.innerHTML = `<span>${String(i).padStart(2,'0')}</span>`;
+            node.addEventListener('click', () => clickNode(i));
+            grid.appendChild(node);
+            nodes.push(node);
+        }
 
-let score = 0;
-let gameActive = false;
-let matrixInterval, spawnTimeout, gameTimer, progressInterval;
-let activeNodes = new Map();
-let gameStart;
+        function activateNode(index) {
+            if (!gameActive || activeNodes.has(index)) return;
+            nodes[index].classList.add('active');
+            const timeout = setTimeout(() => lose(), NODE_LIFETIME);
+            activeNodes.set(index, timeout);
+        }
 
-const grid = document.getElementById('grid');
-const scoreEl = document.getElementById('score');
-const progressBar = document.getElementById('progress-bar');
-const nodes = [];
+        function clickNode(index) {
+            if (!gameActive || !activeNodes.has(index)) return;
+            clearTimeout(activeNodes.get(index));
+            activeNodes.delete(index);
+            nodes[index].classList.remove('active');
+            score++;
+            scoreEl.textContent = score;
+        }
 
-for (let i = 0; i < TOTAL_NODES; i++) {
-    const node = document.createElement('div');
-    node.className = 'node';
-    node.innerHTML = `<span>${String(i).padStart(2,'0')}</span>`;
-    node.addEventListener('click', () => clickNode(i));
-    grid.appendChild(node);
-    nodes.push(node);
-}
+        function spawnNode() {
+            if (!gameActive) return;
+            const available = [];
+            for (let i = 0; i < TOTAL_NODES; i++) {
+                if (!activeNodes.has(i)) available.push(i);
+            }
+            if (available.length === 0) return;
+            activateNode(available[Math.floor(Math.random() * available.length)]);
+        }
 
-function activateNode(index) {
-    if (!gameActive || activeNodes.has(index)) return;
+        function stopAll() {
+            gameActive = false;
+            clearInterval(matrixInterval);
+            clearInterval(spawnInterval);
+            clearInterval(progressInterval);
+            clearTimeout(gameTimer);
+            activeNodes.forEach(t => clearTimeout(t));
+            activeNodes.clear();
+            document.getElementById('game').classList.remove('active');
+            canvas.style.display = 'none';
+        }
 
-    const isTrap = Math.random() < 0.18;
-    const isFast = Math.random() < 0.25;
+        function lose() {
+            stopAll();
+            document.getElementById('lose-screen').classList.add('active');
+            setTimeout(() => location.href = "./index.html", 5000);
+        }
 
-    nodes[index].classList.add('active');
+        function win() {
+            stopAll();
+            document.getElementById('win-screen').classList.add('active');
+        }
 
-    if (isTrap) nodes[index].style.background = "#220000";
-    if (isFast) nodes[index].style.borderColor = "#ff0000";
+        function startGame() {
+            canvas.style.display = 'block';
+            document.getElementById('game').classList.add('active');
+            document.querySelector('img').style.display = 'none';
 
-    const lifetime = isFast ? NODE_LIFETIME * 0.6 : NODE_LIFETIME;
+            gameActive = true;
+            score = 0;
+            scoreEl.textContent = 0;
+            gameStart = Date.now();
 
-    const timeout = setTimeout(() => lose("too slow"), lifetime);
+            matrixInterval = setInterval(drawMatrix, 40);
+            spawnInterval = setInterval(spawnNode, SPAWN_INTERVAL);
+            gameTimer = setTimeout(win, GAME_DURATION);
 
-    activeNodes.set(index, { timeout, isTrap });
-}
+            progressInterval = setInterval(() => {
+                const elapsed = Date.now() - gameStart;
+                const pct = Math.max(0, 100 - (elapsed / GAME_DURATION) * 100);
+                progressBar.style.width = pct + '%';
+            }, 100);
+        }
 
-function clickNode(index) {
-    if (!gameActive || !activeNodes.has(index)) return;
-
-    const data = activeNodes.get(index);
-
-    nodes[index].style.transform = "scale(0.75)";
-    setTimeout(() => nodes[index].style.transform = "scale(1)", 100);
-
-    if (data.isTrap) {
-        lose("wrong one");
-        return;
-    }
-
-    clearTimeout(data.timeout);
-    activeNodes.delete(index);
-
-    nodes[index].classList.remove('active');
-    nodes[index].style.background = "";
-    nodes[index].style.borderColor = "";
-
-    score++;
-    scoreEl.textContent = score;
-
-    if (score >= 45) win();
-}
-
-function spawnLoop() {
-    if (!gameActive) return;
-
-    spawnNode();
-
-    spawnRate *= 0.985;
-    NODE_LIFETIME *= 0.995;
-
-    spawnTimeout = setTimeout(spawnLoop, spawnRate);
-}
-
-function spawnNode() {
-    const available = [];
-    for (let i = 0; i < TOTAL_NODES; i++) {
-        if (!activeNodes.has(i)) available.push(i);
-    }
-    if (available.length === 0) return;
-
-    activateNode(available[Math.floor(Math.random() * available.length)]);
-}
-
-function stopAll() {
-    gameActive = false;
-    clearInterval(matrixInterval);
-    clearTimeout(spawnTimeout);
-    clearInterval(progressInterval);
-    clearTimeout(gameTimer);
-
-    activeNodes.forEach(t => clearTimeout(t.timeout));
-    activeNodes.clear();
-
-    document.getElementById('game').classList.remove('active');
-    canvas.style.display = 'none';
-}
-
-function lose(reason = "i caught you") {
-    stopAll();
-
-    document.getElementById('lose-text').textContent = reason;
-    document.body.style.backgroundColor = "#300000";
-
-    document.getElementById('lose-screen').classList.add('active');
-
-    setTimeout(() => location.href = "./index.html", 4000);
-}
-
-function win() {
-    stopAll();
-    document.getElementById('win-screen').classList.add('active');
-}
-
-function startGame() {
-    canvas.style.display = 'block';
-    document.getElementById('game').classList.add('active');
-    document.querySelector('img').style.display = 'none';
-
-    gameActive = true;
-    score = 0;
-    scoreEl.textContent = 0;
-    gameStart = Date.now();
-
-    matrixInterval = setInterval(drawMatrix, 40);
-    spawnLoop();
-
-    gameTimer = setTimeout(win, GAME_DURATION);
-
-    progressInterval = setInterval(() => {
-        const elapsed = Date.now() - gameStart;
-        const pct = Math.max(0, 100 - (elapsed / GAME_DURATION) * 100);
-        progressBar.style.width = pct + '%';
-    }, 100);
-}
-
-setTimeout(startGame, 2000);
-</script>
+        setTimeout(startGame, 2000);
+    </script>
 </body>
-</html>
+    </html>
