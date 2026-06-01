@@ -11,14 +11,10 @@ canvas{
 }
 
 #crosshair{
-    position:fixed;
-    left:50%;
-    top:50%;
-    width:6px;
-    height:6px;
-    background:white;
-    transform:translate(-50%,-50%);
-    z-index:100;
+    width:2px;
+    height:2px;
+    border-radius:50%;
+    background:rgba(255,255,255,.7);
 }
 
 #interaction{
