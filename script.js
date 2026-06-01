@@ -31,7 +31,7 @@ document.body.appendChild(
 camera.position.set(
     0,
     1.7,
-    5
+    3
 );
 
 const ambient = new THREE.AmbientLight(
