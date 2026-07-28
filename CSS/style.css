@@ -20,8 +20,8 @@ body{
   margin:0;
   background:var(--bg);
   color:var(--text);
-  font-family:'Trirong',serif;
-  font-size:14px;
+  font-family:'Courier Prime',monospace;
+  font-size:15px;
 }
 
 .noise{
@@ -115,7 +115,7 @@ body{
 }
 
 .members{
-  max-width:640px;
+  max-width:700px;
   margin:2rem auto;
   padding:0 1rem;
 }
@@ -128,53 +128,64 @@ body{
   padding-bottom:.4rem;
 }
 
-.memberlist{
-  width:100%;
-  border-collapse:collapse;
-}
-
-.memberlist tr{
+.post{
+  display:flex;
+  gap:1.2rem;
+  padding:1.4rem 0;
   border-bottom:1px solid var(--line);
 }
 
-.memberlist td{
-  padding:.7rem .4rem;
-  vertical-align:top;
+.post-side{
+  flex:0 0 110px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:.3rem;
 }
 
-.avatar img{
-  width:40px;height:40px;
+.post-side img{
+  width:72px;height:72px;
   border:1px solid var(--line);
   background:#1a1815;
   filter:grayscale(1) brightness(.6);
 }
 
 .username{
-  display:block;
   color:#9a8f80;
-  font-weight:600;
+  font-weight:700;
+  font-size:.85rem;
+  word-break:break-word;
 }
 
 .meta{
-  display:block;
-  font-size:.7rem;
+  font-size:.65rem;
   color:var(--text-dim);
-  margin-bottom:.3rem;
 }
 
-.lastpost{
+.post-content{
+  flex:1;
+  display:flex;
+  align-items:center;
+}
+
+.post-content p{
   margin:0;
-  font-size:.8rem;
+  font-size:1.05rem;
+  line-height:1.6;
   color:var(--text);
-  font-style:italic;
 }
 
-tr.flagged .username{
+.post.flagged{
+  background:rgba(92,16,16,0.06);
+}
+
+.post.flagged .username{
   color:var(--blood-bright);
 }
 
-tr.flagged{
-  background:rgba(92,16,16,0.05);
+.post.flagged .post-content p{
+  color:#c9b8b0;
 }
 
 .foot{
