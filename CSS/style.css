@@ -40,12 +40,15 @@ body{
 .bannerimg{height:40px;opacity:0.5}
 
 .banner h1{
-  font-family:'Special Elite',cursive;
+  font-family:'Permanent Marker',cursive;
+  font-weight:400;
   color:#7a1f1f;
-  font-size:2.2rem;
+  font-size:2.6rem;
   margin:.3rem 0 .2rem;
   text-shadow:0 0 10px rgba(122,31,31,0.35);
-  letter-spacing:.05em;
+  letter-spacing:.02em;
+  transform:skewX(-6deg) rotate(-1deg);
+  display:inline-block;
 }
 
 .subtitle{
@@ -114,18 +117,68 @@ body{
   pointer-events:none;
 }
 
-.members{
-  max-width:700px;
+.content{
+  max-width:1000px;
   margin:2rem auto;
   padding:0 1rem;
+  display:flex;
+  gap:2rem;
+  align-items:flex-start;
 }
 
-.members h2{
+.posts-col{
+  flex:1 1 600px;
+  min-width:0;
+}
+
+.gallery-col{
+  flex:0 0 240px;
+  border-left:1px solid var(--line);
+  padding-left:1.5rem;
+}
+
+.posts-col h2, .gallery-col h2{
   font-family:'Special Elite',cursive;
   font-size:1rem;
   color:var(--text-dim);
   border-bottom:1px solid var(--line);
   padding-bottom:.4rem;
+}
+
+.gallery-item{
+  margin-bottom:1.4rem;
+}
+
+.gallery-item img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border:1px solid var(--line);
+  background:#1a1815;
+  filter:grayscale(1) brightness(.6);
+}
+
+.gallery-cap{
+  display:block;
+  font-size:.65rem;
+  color:var(--text-dim);
+  margin-top:.3rem;
+}
+
+.gallery-item.flagged .gallery-cap{
+  color:var(--blood-bright);
+}
+
+@media (max-width:720px){
+  .content{flex-direction:column}
+  .gallery-col{
+    border-left:none;
+    border-top:1px solid var(--line);
+    padding-left:0;
+    padding-top:1.5rem;
+    flex-basis:auto;
+    width:100%;
+  }
 }
 
 .post{
